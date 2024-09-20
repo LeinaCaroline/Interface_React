@@ -1,39 +1,57 @@
 import './style.css'
 import '../../App'
 import Trash from '../../assets/trash.png'
+import api from '../../services/Api'
+import { useEffect, useState, useRef } from 'react'
+
 
 
 function Home() {
 
-  const users = [
-    {
-      id: 'f5f5f5fvf5vfvf',
-      name: 'Mariana Chaves',
-      age: 33,
-      email: 'Mar@email.com'
+  const [users, setUsers] = useState([])
+  const inputName = useRef()
+  const inputAge = useRef()
+  const inputEmail = useRef()
 
 
-    },
-    {
-      id: 'gegd5gdg5dgf',
-      name: 'Helena Soares',
-      age: 29,
-      email: 'Hele@email.com'
+  async function getUsers() {
+    const usersFromApi = await api.get('/usuarios')
 
-    },
-    {
-      id: 'kjkfdg5454hffgh',
-      name: 'Luiza Rosa',
-      age: 18,
-      email: 'LuRosa@email.com'
+    setUsers(usersFromApi.data)
 
-    }
+  }
+
+  async function createUsers() {
+
+    await api.post('/usuarios', {
+      name: inputName.current.value,
+      age: inputAge.current.value,
+      email: inputEmail.current.value
 
 
-  ]
+    })
+
+    getUsers() //carregando uma pessoa na tela
+
+
+  }
 
 
 
+
+  async function deleteUsers(id) {
+
+    await api.delete(`/usuarios/${id}`)
+
+         getUsers() //carregando uma pessoa na tela
+  }
+
+
+
+
+  useEffect(() => {
+    getUsers()
+  }, [])
 
 
   return (
@@ -41,10 +59,10 @@ function Home() {
     <div className='container'>
       <form>
         <h1>Cadastro de Usuários</h1>
-        <input placeholder="Nome" name='nome' type='text' />
-        <input placeholder="Idade" age='idade' type='number' />
-        <input placeholder="E-mail" email='email' type='email' />
-        <button type='button'>Cadastrar</button>
+        <input placeholder="Nome" name='nome' type='text' ref={inputName} />
+        <input placeholder="Idade" age='idade' type='number' ref={inputAge} />
+        <input placeholder="E-mail" email='email' type='email' ref={inputEmail} />
+        <button type='button' onClick={createUsers}>Cadastrar</button>
 
       </form>
 
@@ -55,7 +73,7 @@ function Home() {
             <p>Nome: <span>{user.name}</span></p>
             <p>Idade: <span>{user.age}</span></p>
             <p>Email: <span>{user.email}</span></p>
-            <button>
+            <button onClick={() => deleteUsers(user.id)}>
               <img src={Trash} />
             </button>
           </div>

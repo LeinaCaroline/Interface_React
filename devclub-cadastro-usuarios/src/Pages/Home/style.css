@@ -10,7 +10,7 @@
 h1 {
 
   color: #fff;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -62,16 +62,19 @@ form {
   width: 400px;
   border-radius: 10px;
 
+
   & p {
     color: #fff;
     font-weight: bold;
-
-    & span {
+   
+  
+ &  span {
       font-weight: normal;
   
     }
-
+  
   }
+ 
 
   & button {
     background-color: transparent;
@@ -87,3 +90,4 @@ form {
 
   
 }
+
